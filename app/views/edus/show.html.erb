@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Current education level:</b>
+  <%= @edu.current_education_level %>
+</p>
+
+<p>
+  <b>Resume:</b>
+  <%= @edu.resume %>
+</p>
+
+
+<%= link_to 'Edit', edit_edu_path(@edu) %> |
+<%= link_to 'Back', edus_path %>

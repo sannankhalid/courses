@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  current_education_level: MyString
+  resume: MyString
+
+two:
+  current_education_level: MyString
+  resume: MyString

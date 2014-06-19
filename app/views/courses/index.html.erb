@@ -1,0 +1,57 @@
+<%= render :partial => 'filters' %>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>
+        <%= link_to (image_tag('/assets/asc-arrow.gif') + " Title " + image_tag('/assets/desc-arrow.gif') ).html_safe, :action => :index,:sorton => "title",:state => @state,:page => params[:page] %>
+      </th>
+      <th>
+        <%= link_to (image_tag('/assets/asc-arrow.gif') + " Institution " + image_tag('/assets/desc-arrow.gif') ).html_safe, :action => :index,:sorton => "institution",:state => @state,:page => params[:page] %>      
+      </th>
+      <th>
+        <%= link_to (image_tag('/assets/asc-arrow.gif') + " Instructor " + image_tag('/assets/desc-arrow.gif') ).html_safe, :action => :index,:sorton => "instructor",:state => @state,:page => params[:page] %>            
+      </th>
+      <!-- <th>      
+        Description            
+      </th> -->
+      <th>
+        <%= link_to (image_tag('/assets/asc-arrow.gif') + " Section " + image_tag('/assets/desc-arrow.gif') ).html_safe, :action => :index,:sorton => "section",:state => @state,:page => params[:page] %>                  
+      </th>
+      <th>Url</th>
+      <th> Actions </th>    
+    </tr>
+  </thead>
+  <tbody>
+    <% @courses.each do |course| %>
+      <tr>        
+        <td><%= course.title %></td>
+        <td><%= course.institution %></td>
+        <td><%= course.instructor %></td>
+        <!-- <td><%#= truncate(course.description) %></td> -->
+        <td><%= course.department.name %></td>                
+        <td><%= link_to course.url,course.url ,:target=>"_blank"%></td>
+        <td>
+          <%= link_to "View Details",
+                      course_path(course), :class => 'btn btn-mini',:style=>"margin-bottom: 5px;" %>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_course_path(course), :class => 'btn btn-mini' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      course_path(course),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-mini btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<div class="flickr_pagination">
+  <div class="page_info">
+    <%= page_entries_info @courses %>
+  </div>
+  <%= will_paginate @courses %>
+</div>
+<br>
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_course_path,
+            :class => 'btn btn-primary' %>

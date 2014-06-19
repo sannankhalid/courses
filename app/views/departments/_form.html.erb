@@ -1,0 +1,20 @@
+<%= form_for @department,:url=>departments_path,:method=>"post",:html => { :class => 'form-horizontal' } do |f| %>
+  <div class="control-group">
+    <%= f.label :department, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :name, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :personality, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.select :personality_types,Algorithm::PERSONALITY_TYPE.map{|k,v| [v,k]},{:selected => f.object.personality_types},:multiple=>true,:class=>'select' %>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                departments_path, :class => 'btn' %>
+  </div>
+<% end %>

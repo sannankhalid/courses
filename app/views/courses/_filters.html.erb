@@ -1,0 +1,88 @@
+<div class="search-by" style="margin-bottom: 10px;">
+
+	<%=form_for '', :url => {:action => @action} ,:method=> "get" do -%>
+		Search By 
+		<%=select_tag 'option', options_for_select(@columns,:selected=>params[:option]),:onchange=>"filters_add(this.value)" ,:style=>"width:140px;margin-right:5px"%>
+		<%=text_field_tag "f[#{@columns[0][1].split('@')[0]}]",params[:keyword],:class => 'input',:id=>"keyword" ,:style=>"width:126px;margin-right:5px"%>
+		<%= image_submit_tag('search-icon.png',:class => "vm",:style=>"background: #96c11e;border: 1px solid #96c11e;" ) %>
+	<%end%>
+
+</div>
+<div class="clear"></div>
+<div align="center">
+	<ul class="alpha_paging">
+		<%for i in 65..90 %>
+			<% char = i.chr;
+			if((params[:alpha_search]=='Yes' && params[:keyword]==char) || (!@nodes.nil? && ( @nodes.include?(char) || @nodes.include?(char.downcase) ) ))
+				class_name='active';
+			else
+				class_name='inactive';
+			end
+			%>			
+			<li width="28" align="center" class="<%=class_name%>">
+        <% if class_name == "inactive"%>
+         <%=link_to char ,'javascript:void(0)'%>
+        <% else %>
+         <%=link_to char , {:action => @action , :keyword => char , :char_field => @columns[0][1].split('@')[0] , :alpha_search => 'Yes'}%>
+
+         
+         <% end %>
+      </li>
+		<%end%>
+      <li><%=link_to "All",courses_path%></li>
+	</ul>
+</div>
+
+<script type="text/javascript">
+
+	 window.onload = function() {
+	 	 <%- if params.has_key?('option') -%>
+	 	 	var selected_value = <%= params[:option].to_json.html_safe %>;
+	 	 	var selected_data = <%= params[:f][params[:option].split('@')[0]].to_json.html_safe %>;
+	 	 	filters_add(selected_value);
+	 	 	var data = selected_value.split('@');
+	 	 	if (data[1]=='list') {
+	 	 		selected_index(selected_data)
+	 	 	}	 	 	
+	 	 	else{
+	 	 		document.getElementById('keyword').value = selected_data;
+	 	 	};
+	 	 <%- end -%>
+	 }
+
+
+	// add the filters field based on selection on search by field in listing page 
+	function filters_add(obj) {
+		var data = obj.split('@') ;
+		var keyword = data[0];
+		if (data[1]=="list") {
+			$('#keyword').remove();
+			$('.search-by form select').after('<select id="keyword" name="f['+keyword+']" style="width:140px;margin-right:5px"></select>');
+			if (keyword=="section_id") {
+				var elements = <%= @sections.to_json.html_safe -%>;
+			}			
+			for (var i = 0; i < elements.length; i++) {
+				$('#keyword').append($('<option>', {
+			        value: elements[i][1],
+			        text : elements[i][0]
+			    }));
+			};
+		}
+		else{
+			$('#keyword').remove();
+			$('.search-by form select').after('<input class="input" id="keyword" name="f['+keyword+']" type="text" style="width:126px;margin-right:5px">');
+		};
+	}
+
+	// After search keep selected search term 
+	function selected_index(obj) {
+	  var selObj = document.getElementById('keyword');
+      var selval;
+        for (var i = 0; i < selObj.length; i++) {
+           selval = selObj.options[i].value;
+           if(selval==obj)
+                selObj.options[i].selected=true
+        };
+	}
+
+</script>

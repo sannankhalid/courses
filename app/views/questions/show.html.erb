@@ -1,0 +1,26 @@
+
+<div class="page-header">
+  <h1></h1>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>      
+      <th>Your Most Relevant Career Departments</th>      
+    </tr>
+  </thead>
+  <tbody>
+    <% @sections.each do |section| %>
+      <tr>        
+        <td><%= link_to section.name+" (#{section.courses.count})",courses_path(:sections=>section)%></td>        
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="flickr_pagination">
+  <div class="page_info">
+    <%= page_entries_info @sections %>
+  </div>
+  <%= will_paginate @sections %>
+</div>
+<br>

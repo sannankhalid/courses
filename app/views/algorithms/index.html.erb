@@ -1,0 +1,35 @@
+<%- model_class = Algorithm -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>      
+      <th><%= model_class.human_attribute_name(:question) %></th>
+      <th>Personality</th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @algorithms.each do |algorithm| %>
+      <tr>
+        <!-- <td><%#= link_to algorithm.id, algorithm_path(algorithm) %></td> -->
+        <td><%= algorithm.question %></td>
+        <td><%= Algorithm::PERSONALITY_TYPE[algorithm.trait.to_i] %></td>        
+        <td>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_algorithm_path(algorithm), :class => 'btn btn-mini' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      algorithm_path(algorithm),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-mini btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_algorithm_path,
+            :class => 'btn btn-primary' %>
